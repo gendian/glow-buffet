@@ -18,3 +18,4 @@
 
 # Token
 7540929494:AAENhozzw-E8jTvI19WiRBmeKzF2ipzM-kA
+test in browser: https://api.telegram.org/bot7540929494:AAENhozzw-E8jTvI19WiRBmeKzF2ipzM-kA/getMe
