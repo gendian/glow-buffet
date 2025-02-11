@@ -17,12 +17,12 @@
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
+    <dependencies><!-- https://mvnrepository.com/artifact/org.telegram/Bots -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>6.2.2</version>
-            <scope>compile</scope>
+            <groupId>org.telegram</groupId>
+            <artifactId>Bots</artifactId>
+            <version>8.2.0</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 </project>
