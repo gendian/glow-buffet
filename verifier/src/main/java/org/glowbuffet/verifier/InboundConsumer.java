@@ -1,5 +1,6 @@
 package org.glowbuffet.verifier;
 
+import org.glowbuffet.common.TopicConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,8 @@ public class InboundConsumer {
         this.welcome = welcome;
     }
     private final Logger logger = LoggerFactory.getLogger(InboundConsumer.class);
-    private static final String INBOUND_TOPIC = "inbound";
 
-    @KafkaListener(topics = INBOUND_TOPIC, groupId = "group_id")
+    @KafkaListener(topics = TopicConstants.INBOUND_TOPIC, groupId = "group_id")
     public void consume(String message) throws IOException {
         logger.info(String.format("#### -> Consumed message -> %s", message));
         if (verifiedNumber()) {

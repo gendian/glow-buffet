@@ -15,6 +15,8 @@
 - Maven install `mvn clean install`
 
 ## 4. Run ??
+In dev:
+"Run Services" in intellij.
 
 # Token
 7540929494:AAENhozzw-E8jTvI19WiRBmeKzF2ipzM-kA
