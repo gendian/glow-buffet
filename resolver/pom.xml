@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>conductor</artifactId>
+    <artifactId>resolver</artifactId>
     <version>${project.parent.version}</version>
 
     <properties>

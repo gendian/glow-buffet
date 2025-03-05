@@ -49,6 +49,11 @@
             <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.pengrad</groupId>
+            <artifactId>java-telegram-bot-api</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
@@ -92,10 +97,10 @@
 
     <modules>
         <module>common</module>
-        <module>api-gateway</module>
+        <module>gateway</module>
         <module>verifier</module>
         <module>greeter</module>
-        <module>conductor</module>
+        <module>resolver</module>
     </modules>
 
     <properties>

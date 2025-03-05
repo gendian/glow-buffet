@@ -1,4 +1,9 @@
 package org.glowbuffet.greeter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.glowbuffet.common.TopicConstants;
+import org.glowbuffet.common.dto.Command;
+import org.glowbuffet.common.dto.Resolution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +16,21 @@ import java.io.IOException;
 public class WelcomeConsumer {
     private final OutboundProducer outbound;
     private final Logger logger = LoggerFactory.getLogger(WelcomeConsumer.class);
-    private static final String INBOUND_TOPIC = "welcome";
 
     @Autowired
     WelcomeConsumer(OutboundProducer outbound) {
         this.outbound = outbound;
     }
 
-    @KafkaListener(topics = INBOUND_TOPIC, groupId = "group_id")
+    @KafkaListener(topics = TopicConstants.WELCOME_TOPIC, groupId = "group_id")
     public void consume(String message) throws IOException {
-        logger.info(String.format("#### -> Consumed message -> %s", message));
-        this.outbound.sendMessage(message);
+        logger.info("#### -> Consumed message -> {}", message);
+        Resolution resolution = resolveMessage(message);
+        this.outbound.sendMessage(resolution);
+    }
+
+    private Resolution resolveMessage(String message) throws JsonProcessingException {
+        Command command = new ObjectMapper().readValue(message, Command.class);
+        return new Resolution(command);
     }
 }

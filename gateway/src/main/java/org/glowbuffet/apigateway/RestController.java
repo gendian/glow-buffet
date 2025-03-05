@@ -1,5 +1,7 @@
 package org.glowbuffet.apigateway;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.glowbuffet.common.dto.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +25,7 @@ public class RestController {
 
     @PostMapping("/inbound")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addInbound(@RequestBody Inbound inbound) {
-        this.producer.sendMessage(inbound.content());
+    public void addInbound(@RequestBody Command command) throws JsonProcessingException {
+        this.producer.sendMessage(command);
     }
 }
