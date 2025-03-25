@@ -1,7 +1,9 @@
 package org.glowbuffet.apigateway;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.glowbuffet.common.dto.Command;
+import org.glowbuffet.common.dto.Resolution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,9 @@ public class RestController {
     }
 
     @GetMapping("/outbound")
-    public Outbound getLatestOutbound() {
-        return new Outbound(123, this.consumer.getLatestMessage());
+    public Outbound getLatestOutbound() throws JsonProcessingException {
+        Resolution resolution = new ObjectMapper().readValue(this.consumer.getLatestMessage(), Resolution.class);
+        return new Outbound(123, resolution);
     }
 
     @PostMapping("/inbound")

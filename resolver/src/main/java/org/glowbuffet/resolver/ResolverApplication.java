@@ -1,4 +1,4 @@
-package org.glowbuffet.conductor;
+package org.glowbuffet.resolver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

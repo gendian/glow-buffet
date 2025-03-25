@@ -1,3 +1,7 @@
 package org.glowbuffet.apigateway;
 
-public record Outbound(long id, String content) { }
+import org.glowbuffet.common.dto.Resolution;
+
+public record Outbound(
+        long id,
+        Resolution resolution) { }

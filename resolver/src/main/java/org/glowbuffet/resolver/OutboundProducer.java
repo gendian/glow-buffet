@@ -1,4 +1,4 @@
-package org.glowbuffet.conductor;
+package org.glowbuffet.resolver;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +20,7 @@ public class OutboundProducer {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage(Resolution resolution) throws JsonProcessingException {
-        resolution.setText(resolution.getText() + Math.random());
+        resolution.setText(resolution.getText());
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(resolution);
         logger.info("#### -> Producing message -> {}", json);
