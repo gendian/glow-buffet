@@ -13,10 +13,14 @@ import org.glowbuffet.common.dto.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BotController {
+
+    @Value("${telegram.enabled}")
+    private boolean telegramEnabled;
 
     private static final Logger logger = LoggerFactory.getLogger(BotController.class);
 
@@ -35,35 +39,39 @@ public class BotController {
     }
 
     public void sendUpdates(long chatId, String text) {
-        SendMessage request = new SendMessage(chatId, text)
-                .parseMode(ParseMode.HTML)
-                .disableNotification(true)
-                .replyMarkup(new ForceReply());
+        if (telegramEnabled) {
+            SendMessage request = new SendMessage(chatId, text)
+                    .parseMode(ParseMode.HTML)
+                    .disableNotification(true)
+                    .replyMarkup(new ForceReply());
 
-        // sync
-        SendResponse sendResponse = bot.execute(request);
-        sendResponse.isOk();
-        sendResponse.message();
+            // sync
+            SendResponse sendResponse = bot.execute(request);
+            sendResponse.isOk();
+            sendResponse.message();
+        }
     }
 
     private void receiveUpdates(TelegramBot bot) {
-        bot.setUpdatesListener(updates -> {
-            Message latestMessage = updates.get(updates.size() - 1).message();
-            Command command = new Command(latestMessage);
-            try {
-                producer.sendMessage(command);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+        if (telegramEnabled) {
+            bot.setUpdatesListener(updates -> {
+                Message latestMessage = updates.get(updates.size() - 1).message();
+                Command command = new Command(latestMessage);
+                try {
+                    producer.sendMessage(command);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
 
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        }, e -> {
-            if (e.response() != null) {
-                e.response().errorCode();
-                e.response().description();
-            } else {
-                logger.error("#### -> Producing message -> {}", e.getMessage());
-            }
-        });
+                return UpdatesListener.CONFIRMED_UPDATES_ALL;
+            }, e -> {
+                if (e.response() != null) {
+                    e.response().errorCode();
+                    e.response().description();
+                } else {
+                    logger.error("#### -> Producing message -> {}", e.getMessage());
+                }
+            });
+        }
     }
 }
