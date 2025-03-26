@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class BotController {
 
-    @Value("${telegram.enabled}")
-    private boolean telegramEnabled;
+    private final boolean telegramEnabled = false;
+    private final String botToken = "7540929494:AAENhozzw-E8jTvI19WiRBmeKzF2ipzM-kA";
 
     private static final Logger logger = LoggerFactory.getLogger(BotController.class);
 
@@ -34,7 +34,7 @@ public class BotController {
     }
 
     private void register() {
-        bot = new TelegramBot("7540929494:AAENhozzw-E8jTvI19WiRBmeKzF2ipzM-kA");
+        bot = new TelegramBot(botToken);
         receiveUpdates(bot);
     }
 

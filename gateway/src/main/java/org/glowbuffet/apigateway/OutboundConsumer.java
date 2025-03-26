@@ -2,6 +2,7 @@ package org.glowbuffet.apigateway;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.glowbuffet.apigateway.tele.BotController;
+import org.glowbuffet.apigateway.whatsapp.WhatsappController;
 import org.glowbuffet.common.dto.Resolution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,12 @@ public class OutboundConsumer {
     private final Logger logger = LoggerFactory.getLogger(OutboundConsumer.class);
     private String latestMessage;
     private final BotController botController;
+    private final WhatsappController whatsappController;
 
     @Autowired
-    OutboundConsumer(BotController botController) {
+    OutboundConsumer(BotController botController, WhatsappController whatsappController) {
         this.botController = botController;
+        this.whatsappController = whatsappController;
     }
 
     @KafkaListener(topics = OUTBOUND_TOPIC, groupId = "group_id")
@@ -30,7 +33,10 @@ public class OutboundConsumer {
         logger.info("#### -> Consumed message -> {}", message);
         latestMessage = message;
         Resolution resolution = new ObjectMapper().readValue(message, Resolution.class);
-        botController.sendUpdates(resolution.getChatId(), resolution.getText());
+        if (resolution.getChatId() != 0) {
+            botController.sendUpdates(resolution.getChatId(), resolution.getText());
+            whatsappController.send(String.valueOf(resolution.getChatId()), resolution.getText());
+        }
     }
 
     public String getLatestMessage() {
